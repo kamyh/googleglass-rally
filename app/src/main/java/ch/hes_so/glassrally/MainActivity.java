@@ -2,9 +2,7 @@ package ch.hes_so.glassrally;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,13 +12,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.google.android.glass.media.Sounds;
 import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
 
+import java.util.Date;
+
 import ch.hes_so.glassrally.bluetooth.BluetoothChatService;
 import ch.hes_so.glassrally.bluetooth.Constants;
+import ch.hes_so.glassrally.command.Command;
+import ch.hes_so.glassrally.command.CommandEncoder;
+import ch.hes_so.glassrally.command.CommandFactory;
 
 public class MainActivity extends Activity {
     private CardScrollView mCardScroller;
@@ -71,9 +73,10 @@ public class MainActivity extends Activity {
         mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Plays disallowed sound to indicate that TAP actions are not supported.
-                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                am.playSoundEffect(Sounds.DISALLOWED);
+//                // Plays disallowed sound to indicate that TAP actions are not supported.
+//                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//                am.playSoundEffect(Sounds.DISALLOWED);
+                sendMessage(new Date().toString());
             }
         });
         setContentView(mCardScroller);
@@ -184,8 +187,8 @@ public class MainActivity extends Activity {
         // Check that there's actually something to send
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
-            byte[] send = message.getBytes();
-            mChatService.write(send);
+            Command cmd = CommandFactory.createDebugCommand(message);
+            mChatService.write(cmd);
 
 //            // Reset out string buffer to zero and clear the edit text field
 //            mOutStringBuffer.setLength(0);
@@ -229,17 +232,18 @@ public class MainActivity extends Activity {
                     }
                     break;
                 case Constants.MESSAGE_WRITE:
+                    // this will be executed after the message has been sent
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
 //                    mConversationArrayAdapter.add("Me:  " + writeMessage);
                     break;
                 case Constants.MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
+                    byte[] readBuf = (byte[]) msg.obj;
                     String readMessage = new String(readBuf, 0, msg.arg1);
-//                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
-                    Toast.makeText(getApplicationContext(), readMessage, Toast.LENGTH_LONG).show();
+                    Command cmd = CommandEncoder.fromStream(readMessage);
+                    onCommandReceived(cmd);
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -254,5 +258,12 @@ public class MainActivity extends Activity {
             }
         }
     };
+
+    private void onCommandReceived(Command cmd) {
+        //                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+
+        String msg = "cmd: " + cmd.getName() + ", param: " + cmd.getParameter();
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    }
 
 }
