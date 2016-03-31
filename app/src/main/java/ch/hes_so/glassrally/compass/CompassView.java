@@ -2,6 +2,7 @@ package ch.hes_so.glassrally.compass;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;

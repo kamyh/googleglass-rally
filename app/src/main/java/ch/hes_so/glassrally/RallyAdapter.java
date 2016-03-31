@@ -1,6 +1,7 @@
 package ch.hes_so.glassrally;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -51,11 +52,16 @@ public class RallyAdapter extends CardScrollAdapter
                     .getView();
 
             WebView webView = (WebView) rewardView.findViewById(R.id.webview);
-            webView.loadUrl(reward.getContent());
 
             //For scaling the content but doesn't work
             webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);
+            webView.setInitialScale(1);
+            webView.setVerticalScrollBarEnabled(false);
+            webView.setHorizontalScrollBarEnabled(false);
+
+            //Load the content
+            webView.loadUrl(reward.getContent());
 
             return rewardView;
         }

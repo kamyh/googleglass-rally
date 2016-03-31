@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
     private BluetoothAdapter mBluetoothAdapter;
     private String mConnectedDeviceName = null;
     private BluetoothChatService mChatService = null;
+    private RallyAdapter mRallyAdapter;
 
     // Intent request codes
     private static final int REQUEST_ENABLE_BT = 3;
@@ -50,45 +51,22 @@ public class MainActivity extends Activity {
 
         List<Reward> rewards = new LinkedList<>();
         rewards.add(0, new Reward("First reward","https://wiki.jvflux.com/images/thumb/4/47/Lamasticot.PNG/300px-Lamasticot.PNG"));
-        rewards.add(0, new Reward("Second reward","https://pbs.twimg.com/profile_images/2489824976/wrnw3y2lvmxv14rd8zvr_400x400.jpeg"));
 
-        mCardScroller.setAdapter(new RallyAdapter(this, rewards));
+        mRallyAdapter = new RallyAdapter(this, rewards);
+        mCardScroller.setAdapter(mRallyAdapter);
+        mRallyAdapter.addReward(new Reward("Second reward", "https://pbs.twimg.com/profile_images/2489824976/wrnw3y2lvmxv14rd8zvr_400x400.jpeg"));
+        mRallyAdapter.addReward(new Reward("Third reward", "https://s-media-cache-ak0.pinimg.com/236x/36/a5/7b/36a57b0f0ab16e885fcc230addb695c2.jpg"));
 
-        /*mCardScroller.setAdapter(new CardScrollAdapter() {
-            @Override
-            public int getCount() {
-                return 1;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return mView;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return mView;
-            }
-
-            @Override
-            public int getPosition(Object item) {
-                if (mView.equals(item)) {
-                    return 0;
-                }
-                return AdapterView.INVALID_POSITION;
-            }
-        });*/
-
-        // Handle the TAP event.
-        mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Handle the TAP event.
+                mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                // Plays disallowed sound to indicate that TAP actions are not supported.
 //                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 //                am.playSoundEffect(Sounds.DISALLOWED);
-                sendMessage(new Date().toString());
-            }
-        });
+                        sendMessage(new Date().toString());
+                    }
+                });
         setContentView(mCardScroller);
 
         // Get local Bluetooth adapter
