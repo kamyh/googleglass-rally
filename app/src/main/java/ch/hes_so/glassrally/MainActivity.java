@@ -16,7 +16,10 @@ import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import ch.hes_so.glassrally.bluetooth.BluetoothChatService;
 import ch.hes_so.glassrally.bluetooth.Constants;
@@ -44,7 +47,14 @@ public class MainActivity extends Activity {
         mView = buildView();
 
         mCardScroller = new CardScrollView(this);
-        mCardScroller.setAdapter(new CardScrollAdapter() {
+
+        List<Reward> rewards = new LinkedList<>();
+        rewards.add(0, new Reward("First reward","https://wiki.jvflux.com/images/thumb/4/47/Lamasticot.PNG/300px-Lamasticot.PNG"));
+        rewards.add(0, new Reward("Second reward","https://pbs.twimg.com/profile_images/2489824976/wrnw3y2lvmxv14rd8zvr_400x400.jpeg"));
+
+        mCardScroller.setAdapter(new RallyAdapter(this, rewards));
+
+        /*mCardScroller.setAdapter(new CardScrollAdapter() {
             @Override
             public int getCount() {
                 return 1;
@@ -67,7 +77,7 @@ public class MainActivity extends Activity {
                 }
                 return AdapterView.INVALID_POSITION;
             }
-        });
+        });*/
 
         // Handle the TAP event.
         mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
