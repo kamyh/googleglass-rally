@@ -8,24 +8,21 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.google.android.glass.widget.CardBuilder;
-import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import ch.hes_so.glassrally.bluetooth.BluetoothChatService;
-import ch.hes_so.glassrally.bluetooth.Constants;
-import ch.hes_so.glassrally.command.Command;
-import ch.hes_so.glassrally.command.CommandEncoder;
-import ch.hes_so.glassrally.command.CommandFactory;
+import ch.hes_so.glassrallylibs.bluetooth.BluetoothChatService;
+import ch.hes_so.glassrallylibs.bluetooth.Constants;
+import ch.hes_so.glassrallylibs.bluetooth.command.Command;
+import ch.hes_so.glassrallylibs.bluetooth.command.CommandEncoder;
+import ch.hes_so.glassrallylibs.bluetooth.command.CommandFactory;
 
 public class MainActivity extends Activity {
     private CardScrollView mCardScroller;
@@ -50,23 +47,23 @@ public class MainActivity extends Activity {
         mCardScroller = new CardScrollView(this);
 
         List<Reward> rewards = new LinkedList<>();
-        rewards.add(0, new Reward("First reward","https://wiki.jvflux.com/images/thumb/4/47/Lamasticot.PNG/300px-Lamasticot.PNG"));
+        rewards.add(0, new Reward("First reward", "https://wiki.jvflux.com/images/thumb/4/47/Lamasticot.PNG/300px-Lamasticot.PNG"));
 
         mRallyAdapter = new RallyAdapter(this, rewards);
         mCardScroller.setAdapter(mRallyAdapter);
         mRallyAdapter.addReward(new Reward("Second reward", "https://pbs.twimg.com/profile_images/2489824976/wrnw3y2lvmxv14rd8zvr_400x400.jpeg"));
         mRallyAdapter.addReward(new Reward("Third reward", "https://s-media-cache-ak0.pinimg.com/236x/36/a5/7b/36a57b0f0ab16e885fcc230addb695c2.jpg"));
 
-                // Handle the TAP event.
-                mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // Handle the TAP event.
+        mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                // Plays disallowed sound to indicate that TAP actions are not supported.
 //                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 //                am.playSoundEffect(Sounds.DISALLOWED);
-                        sendMessage(new Date().toString());
-                    }
-                });
+                sendMessage(new Date().toString());
+            }
+        });
         setContentView(mCardScroller);
 
         // Get local Bluetooth adapter

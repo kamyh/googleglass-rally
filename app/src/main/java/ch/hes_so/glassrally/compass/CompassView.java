@@ -2,7 +2,6 @@ package ch.hes_so.glassrally.compass;
 
 import android.content.Context;
 import android.hardware.SensorManager;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -12,8 +11,7 @@ import com.google.android.glass.widget.CardBuilder;
 
 import ch.hes_so.glassrally.R;
 
-public class CompassView implements OrientationManager.OnChangedListener
-{
+public class CompassView implements OrientationManager.OnChangedListener {
     private View mCompassView;
     private ImageView mCompassImageView;
 
@@ -38,24 +36,20 @@ public class CompassView implements OrientationManager.OnChangedListener
         startOrientationManager();
     }
 
-    public View getCompassView()
-    {
+    public View getCompassView() {
         return mCompassView;
     }
 
-    public void setTargetDegree(float targetDegree)
-    {
+    public void setTargetDegree(float targetDegree) {
         mTargetDegree = targetDegree;
         updateOrientation();
     }
 
-    public void startOrientationManager()
-    {
+    public void startOrientationManager() {
         mOrientationManager.start();
     }
 
-    public void stopOrientationManager()
-    {
+    public void stopOrientationManager() {
         mOrientationManager.stop();
     }
 
@@ -69,8 +63,7 @@ public class CompassView implements OrientationManager.OnChangedListener
         //nothing
     }
 
-    private void updateOrientation()
-    {
+    private void updateOrientation() {
         // get the angle around the z-axis rotated
         float degree = Math.round(mOrientationManager.getHeading());
 
