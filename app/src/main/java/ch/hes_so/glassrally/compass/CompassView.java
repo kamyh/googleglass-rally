@@ -1,10 +1,12 @@
 package ch.hes_so.glassrally.compass;
 
 import android.content.Context;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
+import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.google.android.glass.widget.CardBuilder;
@@ -33,6 +35,17 @@ public class CompassView implements OrientationManager.OnChangedListener {
 
         mOrientationManager = new OrientationManager(sensorManager);
         mOrientationManager.addOnChangedListener(this);
+        mCompassView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                startOrientationManager();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                stopOrientationManager();
+            }
+        });
         startOrientationManager();
     }
 
@@ -69,22 +82,18 @@ public class CompassView implements OrientationManager.OnChangedListener {
 
         //TODO do something with the target degree
 
-        // create a rotation animation (reverse turn degree degrees)
-        RotateAnimation ra = new RotateAnimation(
-                mCurrentDegree,
-                -degree,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f);
+        float scale = 0.3f;
+        Matrix mat = new Matrix();
 
-        // how long the animation will take place
-        ra.setDuration(210);
+        mat.postRotate(-degree, mCompassImageView.getWidth() / 2.0f, mCompassImageView.getHeight() / 2.0f);
+        mat.postScale(scale, scale);
+        mat.postTranslate(mCompassImageView.getWidth() / 2 - mCompassImageView.getWidth() * scale * 0.5f, mCompassImageView.getHeight() / 2 - mCompassImageView.getHeight() * scale * 0.5f);
 
-        // set the animation after the end of the reservation status
-        ra.setFillAfter(true);
+        mCompassImageView.getImageMatrix().set(mat);
 
-        // Start the animation
-        mCompassImageView.startAnimation(ra);
+        mCompassImageView.invalidate();
+        mCompassView.invalidate();
+
         mCurrentDegree = -degree;
     }
 }

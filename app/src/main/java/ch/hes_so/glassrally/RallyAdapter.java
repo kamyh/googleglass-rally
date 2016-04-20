@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.webkit.WebView;
+import android.widget.ImageView;
 
 import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
@@ -67,6 +69,7 @@ public class RallyAdapter extends CardScrollAdapter
         }
         else
         {
+            Log.d("ORIENTATION", "getCompassView");
             return mCompassView.getCompassView();
         }
     }
