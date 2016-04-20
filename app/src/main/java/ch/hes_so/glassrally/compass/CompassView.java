@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +20,8 @@ public class CompassView implements OrientationManager.OnChangedListener {
 
     private float mTargetDegree = 0f;
     private float mCurrentDegree = 0f;
+    private LatLng origin;
+    private LatLng destination;
 
     private OrientationManager mOrientationManager;
 
@@ -53,8 +56,20 @@ public class CompassView implements OrientationManager.OnChangedListener {
         return mCompassView;
     }
 
-    public void setTargetDegree(float targetDegree) {
-        mTargetDegree = targetDegree;
+    public void setOrigin(LatLng origin) {
+        this.origin = new LatLng(origin);
+        updateTargetDegree();
+    }
+
+    public void setDestination(LatLng destination) {
+        this.destination = new LatLng(destination);
+        updateTargetDegree();
+    }
+
+    public void updateTargetDegree() {
+
+        //TODO compute targetDegree with destination and origin
+        mTargetDegree = 0;
         updateOrientation();
     }
 

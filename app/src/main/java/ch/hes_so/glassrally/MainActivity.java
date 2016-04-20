@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.hes_so.glassrally.compass.LatLng;
 import ch.hes_so.glassrallylibs.bluetooth.BluetoothChatService;
 import ch.hes_so.glassrallylibs.bluetooth.Constants;
 import ch.hes_so.glassrallylibs.bluetooth.command.Command;
@@ -249,6 +250,52 @@ public class MainActivity extends Activity {
 
         String msg = "cmd: " + cmd.getName() + ", param: " + cmd.getParameter();
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+
+        int test = 0; //TODO replace by cmd name
+        switch(test)
+        {
+            case 0:
+                //Connected
+                //TODO Toast or something else ?
+
+                break;
+            case 1:
+                //Game Over
+                //TODO Game Over screen
+
+                break;
+            case 2: {
+                //Position update
+                //TODO parse lat long
+                double lat = 0;
+                double lng = 0;
+
+                LatLng position = new LatLng(lat, lng);
+                mRallyAdapter.setOrigin(position);
+
+                break;
+            }
+            case 3: {
+                //Next Checkpoint
+                //TODO parse lat long
+                double lat = 0;
+                double lng = 0;
+
+                LatLng destination = new LatLng(lat, lng);
+                mRallyAdapter.setOrigin(destination);
+
+                break;
+            }
+            case 4:
+                //Reward
+
+                //TODO parse Reward
+                Reward reward = new Reward("reward name", "http://vignette3.wikia.nocookie.net/ssb/images/2/2b/Lol-face.gif");
+
+                mRallyAdapter.addReward(reward);
+                break;
+
+        }
     }
 
 }

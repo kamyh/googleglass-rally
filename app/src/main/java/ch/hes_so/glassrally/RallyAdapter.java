@@ -14,6 +14,7 @@ import com.google.android.glass.widget.CardScrollAdapter;
 import java.util.List;
 
 import ch.hes_so.glassrally.compass.CompassView;
+import ch.hes_so.glassrally.compass.LatLng;
 
 public class RallyAdapter extends CardScrollAdapter
 {
@@ -69,7 +70,6 @@ public class RallyAdapter extends CardScrollAdapter
         }
         else
         {
-            Log.d("ORIENTATION", "getCompassView");
             return mCompassView.getCompassView();
         }
     }
@@ -87,5 +87,15 @@ public class RallyAdapter extends CardScrollAdapter
     {
         mRewards.add(0, reward);
         notifyDataSetChanged();
+    }
+
+    public void setOrigin(LatLng origin)
+    {
+        mCompassView.setOrigin(origin);
+    }
+
+    public void setDestination(LatLng destination)
+    {
+        mCompassView.setDestination(destination);
     }
 }
