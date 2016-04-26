@@ -89,6 +89,12 @@ public class RallyAdapter extends CardScrollAdapter
         notifyDataSetChanged();
     }
 
+    public void resetReward()
+    {
+        mRewards.clear();
+        notifyDataSetChanged();
+    }
+
     public void setOrigin(LatLng origin)
     {
         mCompassView.setOrigin(origin);
