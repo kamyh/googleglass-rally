@@ -245,7 +245,7 @@ public class MainActivity extends Activity {
         //                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
 
         String msg = "cmd: " + cmd.getName() + ", param: " + cmd.getParameter();
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 
         int test = 0; //TODO replace by cmd name
         switch (test) {
