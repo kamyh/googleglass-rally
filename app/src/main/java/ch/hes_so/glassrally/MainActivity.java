@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -18,16 +17,13 @@ import com.google.android.glass.widget.CardScrollView;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import ch.hes_so.glassrally.compass.LatLng;
 import ch.hes_so.glassrallylibs.bluetooth.BluetoothChatService;
 import ch.hes_so.glassrallylibs.bluetooth.Constants;
-import ch.hes_so.glassrallylibs.bluetooth.command.Command;
-import ch.hes_so.glassrallylibs.bluetooth.command.Command_E;
-import ch.hes_so.glassrallylibs.bluetooth.command.CommandEncoder;
-import ch.hes_so.glassrallylibs.bluetooth.command.CommandFactory;
+import ch.hes_so.glassrallylibs.command.Command;
+import ch.hes_so.glassrallylibs.command.CommandEncoder;
+import ch.hes_so.glassrallylibs.command.CommandFactory;
 
 public class MainActivity extends Activity {
     private CardScrollView mCardScroller;
@@ -252,8 +248,7 @@ public class MainActivity extends Activity {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
 
         int test = 0; //TODO replace by cmd name
-        switch(test)
-        {
+        switch (test) {
             case 0:
                 //Connected
                 //TODO Toast or something else ?
