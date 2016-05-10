@@ -3,6 +3,7 @@ package ch.hes_so.glassrally;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +19,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import ch.hes_so.glassrally.compass.LatLng;
 import ch.hes_so.glassrallylibs.bluetooth.BluetoothThread;
 import ch.hes_so.glassrallylibs.bluetooth.Constants;
 import ch.hes_so.glassrallylibs.command.Command;
@@ -242,56 +242,60 @@ public class MainActivity extends Activity {
     };
 
     private void onCommandReceived(Command cmd) {
-        //                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
-
         String msg = "cmd: " + cmd.getName() + ", param: " + cmd.getParameter();
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 
-        int test = 0; //TODO replace by cmd name
-        switch (test) {
-            case 0:
-                //Connected
-                //TODO Toast or something else ?
-
+        switch (cmd.getName()) {
+            case DEBUG:
+                Log.d(TAG, "debug cmd: " + cmd.getParameter());
                 break;
-            case 1:
-                //Game Over
-                //TODO Game Over screen
 
-                break;
-            case 2: {
-                //Position update
-                //TODO parse lat long
-                double lat = 0;
-                double lng = 0;
+            case NEW_VECTOR: {
+                String[] parameters = cmd.getParameter().split(Command.PARAMETER_DELIMITER);
 
-                LatLng position = new LatLng(lat, lng);
-                mRallyAdapter.setOrigin(position);
+                // current position
+                double currentLat = Double.parseDouble(parameters[0]);
+                double currentLng = Double.parseDouble(parameters[1]);
 
-                break;
-            }
-            case 3: {
-                //Next Checkpoint
-                //TODO parse lat long
-                double lat = 0;
-                double lng = 0;
+                Location currentPosition = new Location("current");
+                currentPosition.setLatitude(currentLat);
+                currentPosition.setLongitude(currentLng);
+                mRallyAdapter.setOrigin(currentPosition);
 
-                LatLng destination = new LatLng(lat, lng);
-                mRallyAdapter.setOrigin(destination);
+                // target position
+                double targetLat = Double.parseDouble(parameters[2]);
+                double targetLng = Double.parseDouble(parameters[3]);
+
+                Location targetPosition = new Location("target");
+                targetPosition.setLatitude(targetLat);
+                targetPosition.setLongitude(targetLng);
+                mRallyAdapter.setDestination(targetPosition);
 
                 break;
             }
-            case 4:
-                //Reward
-
-                //TODO parse Reward
-                Reward reward = new Reward("reward name", "http://vignette3.wikia.nocookie.net/ssb/images/2/2b/Lol-face.gif");
-
-                mRallyAdapter.addReward(reward);
-                mCardScroller.setSelection(1); //Jump to the new reward Card
-                break;
-
+//            case 3: {
+//                //Next Checkpoint
+//                //TODO parse lat long
+//                double lat = 0;
+//                double lng = 0;
+//
+//                LatLng destination = new LatLng(lat, lng);
+//                mRallyAdapter.setOrigin(destination);
+//
+//                break;
+//            }
+//            case 4:
+//                //Reward
+//
+//                //TODO parse Reward
+//                Reward reward = new Reward("reward name", "http://vignette3.wikia.nocookie.net/ssb/images/2/2b/Lol-face.gif");
+//
+//                mRallyAdapter.addReward(reward);
+//                mCardScroller.setSelection(1); //Jump to the new reward Card
+//                break;
+//
         }
     }
 
 }
+

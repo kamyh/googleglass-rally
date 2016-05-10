@@ -2,11 +2,8 @@ package ch.hes_so.glassrally.compass;
 
 import android.content.Context;
 import android.graphics.Matrix;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,10 +15,8 @@ public class CompassView implements OrientationManager.OnChangedListener {
     private View mCompassView;
     private ImageView mCompassImageView;
 
-    private float mTargetDegree = 0f;
-    private float mCurrentDegree = 0f;
-    private LatLng origin;
-    private LatLng destination;
+    private Location origin = new Location("origin");
+    private Location destination = new Location("destination");
 
     private OrientationManager mOrientationManager;
 
@@ -56,21 +51,12 @@ public class CompassView implements OrientationManager.OnChangedListener {
         return mCompassView;
     }
 
-    public void setOrigin(LatLng origin) {
-        this.origin = new LatLng(origin);
-        updateTargetDegree();
+    public void setOrigin(Location origin) {
+        this.origin = new Location(origin);
     }
 
-    public void setDestination(LatLng destination) {
-        this.destination = new LatLng(destination);
-        updateTargetDegree();
-    }
-
-    public void updateTargetDegree() {
-
-        //TODO compute targetDegree with destination and origin
-        mTargetDegree = 0;
-        updateOrientation();
+    public void setDestination(Location destination) {
+        this.destination = new Location(destination);
     }
 
     public void startOrientationManager() {
@@ -93,9 +79,9 @@ public class CompassView implements OrientationManager.OnChangedListener {
 
     private void updateOrientation() {
         // get the angle around the z-axis rotated
-        float degree = Math.round(mOrientationManager.getHeading());
-
-        //TODO do something with the target degree
+        float bearing = origin.bearingTo(destination);
+        float degree = (mOrientationManager.getHeading() - bearing);
+        degree = (degree + 360) % 360;
 
         float scale = 0.3f;
         Matrix mat = new Matrix();
@@ -108,7 +94,5 @@ public class CompassView implements OrientationManager.OnChangedListener {
 
         mCompassImageView.invalidate();
         mCompassView.invalidate();
-
-        mCurrentDegree = -degree;
     }
 }

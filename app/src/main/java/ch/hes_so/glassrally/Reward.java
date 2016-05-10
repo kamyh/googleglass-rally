@@ -5,19 +5,16 @@ public class Reward {
     private String mName; // The name of the checkpoint reached
     private String mContent; // The corresponding reward
 
-    public Reward(String name, String content)
-    {
+    public Reward(String name, String content) {
         mName = name;
         mContent = content;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return mName;
     }
 
-    public String getContent()
-    {
+    public String getContent() {
         return mContent;
     }
 }

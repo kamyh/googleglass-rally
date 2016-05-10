@@ -1,12 +1,10 @@
 package ch.hes_so.glassrally;
 
 import android.content.Context;
-import android.util.Log;
+import android.location.Location;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.webkit.WebView;
-import android.widget.ImageView;
 
 import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
@@ -14,10 +12,8 @@ import com.google.android.glass.widget.CardScrollAdapter;
 import java.util.List;
 
 import ch.hes_so.glassrally.compass.CompassView;
-import ch.hes_so.glassrally.compass.LatLng;
 
-public class RallyAdapter extends CardScrollAdapter
-{
+public class RallyAdapter extends CardScrollAdapter {
     private List<Reward> mRewards;
     private Context mContext;
 
@@ -36,7 +32,7 @@ public class RallyAdapter extends CardScrollAdapter
 
     @Override
     public Object getItem(int i) {
-        if(i == 0)
+        if (i == 0)
             return null; //TODO return something ?
         else
             return mRewards.get(i - 1);
@@ -45,9 +41,9 @@ public class RallyAdapter extends CardScrollAdapter
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        if(i > 0) {
+        if (i > 0) {
 
-            Reward reward = mRewards.get(i-1);
+            Reward reward = mRewards.get(i - 1);
 
             View rewardView = new CardBuilder(mContext, CardBuilder.Layout.EMBED_INSIDE)
                     .setEmbeddedLayout(R.layout.reward_layout)
@@ -67,41 +63,34 @@ public class RallyAdapter extends CardScrollAdapter
             webView.loadUrl(reward.getContent());
 
             return rewardView;
-        }
-        else
-        {
+        } else {
             return mCompassView.getCompassView();
         }
     }
 
     @Override
     public int getPosition(Object o) {
-
-        if(o instanceof Reward)
+        if (o instanceof Reward)
             return mRewards.indexOf(o);
         else
-            return  0; //TODO maybe check more ?
+            return 0; //TODO maybe check more ?
     }
 
-    public void addReward(Reward reward)
-    {
+    public void addReward(Reward reward) {
         mRewards.add(0, reward);
         notifyDataSetChanged();
     }
 
-    public void resetReward()
-    {
+    public void resetReward() {
         mRewards.clear();
         notifyDataSetChanged();
     }
 
-    public void setOrigin(LatLng origin)
-    {
+    public void setOrigin(Location origin) {
         mCompassView.setOrigin(origin);
     }
 
-    public void setDestination(LatLng destination)
-    {
+    public void setDestination(Location destination) {
         mCompassView.setDestination(destination);
     }
 }
