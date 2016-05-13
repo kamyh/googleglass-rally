@@ -40,14 +40,11 @@ public class RallyAdapter extends CardScrollAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
         if (i > 0) {
-
             Reward reward = mRewards.get(i - 1);
 
             View rewardView = new CardBuilder(mContext, CardBuilder.Layout.EMBED_INSIDE)
                     .setEmbeddedLayout(R.layout.reward_layout)
-                    .setFootnote(reward.getName())
                     .getView();
 
             WebView webView = (WebView) rewardView.findViewById(R.id.webview);
@@ -92,5 +89,9 @@ public class RallyAdapter extends CardScrollAdapter {
 
     public void setDestination(Location destination) {
         mCompassView.setDestination(destination);
+    }
+
+    public void setDistance(float distance) {
+        this.mCompassView.setDistance(distance);
     }
 }

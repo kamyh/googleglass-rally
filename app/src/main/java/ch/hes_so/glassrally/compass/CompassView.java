@@ -4,16 +4,21 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.glass.widget.CardBuilder;
 
 import ch.hes_so.glassrally.R;
 
 public class CompassView implements OrientationManager.OnChangedListener {
+    private static final String TAG = CompassView.class.getSimpleName();
+    private final Context mContext;
     private View mCompassView;
     private ImageView mCompassImageView;
+    private TextView mDistanceTextView;
 
     private Location origin = new Location("origin");
     private Location destination = new Location("destination");
@@ -21,12 +26,14 @@ public class CompassView implements OrientationManager.OnChangedListener {
     private OrientationManager mOrientationManager;
 
     public CompassView(Context context) {
+        mContext = context;
 
         mCompassView = new CardBuilder(context, CardBuilder.Layout.EMBED_INSIDE)
                 .setEmbeddedLayout(R.layout.compass_layout)
                 .getView();
 
         mCompassImageView = (ImageView) mCompassView.findViewById(R.id.imageViewCompass);
+        mDistanceTextView = (TextView) mCompassView.findViewById(R.id.tvDistance);
 
         SensorManager sensorManager =
                 (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -94,5 +101,11 @@ public class CompassView implements OrientationManager.OnChangedListener {
 
         mCompassImageView.invalidate();
         mCompassView.invalidate();
+    }
+
+    public void setDistance(float distance) {
+        Log.d(TAG, "distance: " + distance);
+        String formattedDistance = (distance > 1000) ? (int) (distance / 1000) + " m" : (int) (distance) + " m";
+        mDistanceTextView.setText(mContext.getString(R.string.distance) + ": " + formattedDistance);
     }
 }

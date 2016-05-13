@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvDistance"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:text="@string/distance"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="24dp" />
 
     <ImageView
         android:id="@+id/imageViewCompass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/img_compass"
-        android:background="@color/black"/>
+        android:layout_gravity="center_horizontal"
+        android:background="@color/black"
+        android:src="@drawable/img_compass" />
 
-</RelativeLayout>
+
+</LinearLayout>

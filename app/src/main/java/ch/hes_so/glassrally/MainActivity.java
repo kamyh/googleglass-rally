@@ -3,6 +3,7 @@ package ch.hes_so.glassrally;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +29,6 @@ import ch.hes_so.glassrallylibs.command.CommandFactory;
 public class MainActivity extends Activity {
     private CardScrollView mCardScroller;
 
-    private View mView;
     private BluetoothAdapter mBluetoothAdapter;
     private String mConnectedDeviceName = null;
     private BluetoothThread mChatService = null;
@@ -42,8 +42,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-
-        mView = buildView();
 
         mCardScroller = new CardScrollView(this);
 
@@ -203,12 +201,14 @@ public class MainActivity extends Activity {
                     switch (msg.arg1) {
                         case BluetoothThread.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                            mCardScroller.setBackgroundColor(Color.GREEN);
                             break;
                         case BluetoothThread.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
                             break;
                         case BluetoothThread.STATE_LISTEN:
                         case BluetoothThread.STATE_NONE:
+                            mCardScroller.setBackgroundColor(Color.RED);
                             setStatus(R.string.title_not_connected);
                             break;
                     }
@@ -243,7 +243,8 @@ public class MainActivity extends Activity {
 
     private void onCommandReceived(Command cmd) {
         String msg = "cmd: " + cmd.getName() + ", param: " + cmd.getParameter();
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, msg);
 
         switch (cmd.getName()) {
             case DEBUG:
@@ -252,6 +253,12 @@ public class MainActivity extends Activity {
 
             case NEW_VECTOR: {
                 String[] parameters = cmd.getParameter().split(Command.PARAMETER_DELIMITER);
+
+                // FIXME Sometimes the Bluetooth truncate the sent string. I don't know why.
+                if (parameters.length < 4) {
+                    Log.wtf(TAG, "Should not happen");
+                    break;
+                }
 
                 // current position
                 double currentLat = Double.parseDouble(parameters[0]);
@@ -273,27 +280,23 @@ public class MainActivity extends Activity {
 
                 break;
             }
-//            case 3: {
-//                //Next Checkpoint
-//                //TODO parse lat long
-//                double lat = 0;
-//                double lng = 0;
-//
-//                LatLng destination = new LatLng(lat, lng);
-//                mRallyAdapter.setOrigin(destination);
-//
-//                break;
-//            }
-//            case 4:
-//                //Reward
-//
-//                //TODO parse Reward
-//                Reward reward = new Reward("reward name", "http://vignette3.wikia.nocookie.net/ssb/images/2/2b/Lol-face.gif");
-//
-//                mRallyAdapter.addReward(reward);
-//                mCardScroller.setSelection(1); //Jump to the new reward Card
-//                break;
-//
+
+            case REWARD: {
+                String content = cmd.getParameter();
+                Reward reward = new Reward(content);
+
+                mRallyAdapter.addReward(reward);
+                mCardScroller.setSelection(1); //Jump to the new reward Card
+
+                break;
+            }
+
+            case NEW_DISTANCE: {
+                float distance = Float.parseFloat(cmd.getParameter());
+                mRallyAdapter.setDistance(distance);
+
+                break;
+            }
         }
     }
 
