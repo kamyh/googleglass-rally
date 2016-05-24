@@ -201,14 +201,14 @@ public class MainActivity extends Activity {
                     switch (msg.arg1) {
                         case BluetoothThread.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            mCardScroller.setBackgroundColor(Color.GREEN);
+                            mRallyAdapter.setDistanceColor(Color.GREEN);
                             break;
                         case BluetoothThread.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
                             break;
                         case BluetoothThread.STATE_LISTEN:
                         case BluetoothThread.STATE_NONE:
-                            mCardScroller.setBackgroundColor(Color.RED);
+                            mRallyAdapter.setDistanceColor(Color.RED);
                             setStatus(R.string.title_not_connected);
                             break;
                     }
@@ -292,9 +292,12 @@ public class MainActivity extends Activity {
             }
 
             case NEW_DISTANCE: {
-                float distance = Float.parseFloat(cmd.getParameter());
-                mRallyAdapter.setDistance(distance);
-
+                try {
+                    float distance = Float.parseFloat(cmd.getParameter());
+                    mRallyAdapter.setDistance(distance);
+                } catch (NumberFormatException e) {
+                    Log.e(TAG, e.getMessage());
+                }
                 break;
             }
         }

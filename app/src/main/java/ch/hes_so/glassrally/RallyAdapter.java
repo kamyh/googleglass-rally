@@ -94,4 +94,8 @@ public class RallyAdapter extends CardScrollAdapter {
     public void setDistance(float distance) {
         this.mCompassView.setDistance(distance);
     }
+
+    public void setDistanceColor(int color){
+        this.mCompassView.setDistanceColor(color);
+    }
 }

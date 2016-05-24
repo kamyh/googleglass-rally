@@ -108,4 +108,8 @@ public class CompassView implements OrientationManager.OnChangedListener {
         String formattedDistance = (distance > 1000) ? (int) (distance / 1000) + " m" : (int) (distance) + " m";
         mDistanceTextView.setText(mContext.getString(R.string.distance) + ": " + formattedDistance);
     }
+
+    public void setDistanceColor(int color) {
+        mDistanceTextView.setTextColor(color);
+    }
 }
